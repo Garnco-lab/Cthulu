@@ -1,6 +1,7 @@
 #!/usr/bin/python3.4
 # Setup Python ----------------------------------------------- #
 from operator import truediv
+from turtle import width, window_height, window_width
 import pygame, sys, random
 
 # Setup pygame/window ---------------------------------------- #
@@ -34,6 +35,8 @@ cthulu = defaultcthulunum
 player2sanitynum = defaultsanitynum
 playerturn = 0
 pickchoice = False
+gameLoss = False
+lastmove = ""
 
 def rollDice():
 	global rollMin
@@ -54,7 +57,7 @@ def compress():
 			tempnum = rollDice()
 		if pickchoice == True:
 			pickchoice = False
-			print("player 1")
+
 		match tempnum:
 			case 1:
 				player2sanitynum -= 1
@@ -80,11 +83,12 @@ def compress():
 			tempnum = rollDice()
 		if pickchoice == True:
 			pickchoice = False
-		print("player 2")
+
 		match tempnum:
 			case 1:
 				player1sanitynum -= 1
 				cthulu += 1
+
 			case 2:
 				player2sanitynum += 1
 				player1sanitynum -= 1
@@ -109,25 +113,100 @@ def main_menu():
 	global playerturn
 	global pickchoice
 	global tempnum
+	global lastmove
+	global gameLoss
 	
 	while True:
-	
+		
+
+
 		screen.fill((0,0,0))
+		if gameLoss != True:
+			match tempnum:
+				case 1:
+					if playerturn == 0:
+						draw_text("PLAYER 2 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+					elif playerturn == 1:
+						draw_text("PLAYER 1 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+					draw_text("Yellow Sign: -1 other player",font, (255,255,255), screen, 300, 300)
+					draw_text("+1 Cthulu",font, (255,255,255), screen, 300, 320)
+				case 2:
+					if playerturn == 0:
+						draw_text("PLAYER 2 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+					elif playerturn == 1:
+						draw_text("PLAYER 1 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+
+					draw_text("Tentacle: +1 you",font, (255,255,255), screen, 300, 300)
+					draw_text("-1 other player",font, (255,255,255), screen, 300, 320)
+				case 3:
+					if playerturn == 0:
+						draw_text("PLAYER 2 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+					elif playerturn == 1:
+						draw_text("PLAYER 1 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+
+					draw_text("Elder Sign: +1 you, -1 Cthulu",font, (255,255,255), screen, 300, 300)
+					draw_text("-1 Cthulu",font, (255,255,255), screen, 300, 320)
+				case 4:
+					if playerturn == 0:
+						draw_text("PLAYER 2 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+					elif playerturn == 1:
+						draw_text("PLAYER 1 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+
+					draw_text("Cthulu: +2 Cthulu,",font, (255,255,255), screen, 300, 300)
+					draw_text("-1 you",font, (255,255,255), screen, 300, 320)
+					draw_text("-1 other player",font, (255,255,255), screen, 300, 340)
+				case 5:
+					if playerturn == 0:
+						draw_text("PLAYER 2 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+					elif playerturn == 1:
+						draw_text("PLAYER 1 LAST ROLL:",font, (255,255,255), screen, 300, 280)
+
+					draw_text("Eye: Choose any",font, (255,255,255), screen, 300, 300)
 
 		if player1sanitynum <= 0 and player2sanitynum <= 0:
-			print("tie!")
+
+			draw_text("CTHULU WINS", font, (255, 255,255), screen, 300, 300)
+			gameLoss = True
+			if click:
+
+				player1sanitynum = 3
+				player2sanitynum = 3
+				cthulu = 0
+				gameLoss = False
+				main_menu()
 		elif player1sanitynum <= 0:
-			print("player 1 loses!")
+			draw_text("PLAYER 2 WINS",font, (255,255,255), screen, 300, 300)
+			gameLoss = True
+			if click:
+				
+				player1sanitynum = 3
+				player2sanitynum = 3
+				cthulu = 0
+				gameLoss = False
+				main_menu()
 		elif player2sanitynum <= 0:
-			print("player 2 loses!")
+			draw_text("PLAYER 1 WINS",font, (255,255,255), screen, 300, 300)
+			gameLoss = True
+			if click:
+				player1sanitynum = 3
+				player2sanitynum = 3
+				cthulu = 0
+				gameLoss = False
+				main_menu()
+
 
 
 		# draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
 		mx, my = pygame.mouse.get_pos()
 
-		draw_text("PLAYER 1 - SANITY: " + str(player1sanitynum).encode("utf-8").decode("utf-8") + " " + str(playerturn).encode("utf-8").decode("utf-8"), font,(255, 255, 255), screen, 20, 20)
+		draw_text("PLAYER 1 - SANITY: " + str(player1sanitynum).encode("utf-8").decode("utf-8"), font,(255, 255, 255), screen, 20, 20)
 		draw_text("PLAYER 2 - SANITY: " + str(player2sanitynum).encode("utf-8").decode("utf-8") , font,(255, 255, 255), screen, 300, 20)
 		draw_text("CTHULU: " + str(cthulu).encode("utf-8").decode("utf-8"), font,(255, 255, 255), screen, 200, 20)
+
+		if playerturn == 0:
+			draw_text("PLAYER 1 TURN", font,(255, 255, 255), screen, 200, 100)
+		elif playerturn == 1:
+			draw_text("PLAYER 2 TURN", font,(255, 255, 255), screen, 200, 100)
 
 		button_1 = pygame.Rect(100, 100, 50, 50)
 		button_2 = pygame.Rect(50, 200, 50, 50)
@@ -139,9 +218,14 @@ def main_menu():
 		
 		if pickchoice == True:
 			pygame.draw.rect(screen, (255, 0, 0), button_1)
+			draw_text("1. Yellow Sign", font, (255, 255, 255), screen, 100, 100)
 			pygame.draw.rect(screen, (255, 0, 0), button_2)
+			draw_text("2. Tentacle", font, (255, 255, 255), screen, 50, 200)
 			pygame.draw.rect(screen, (255, 0, 0), button_4)
+			draw_text("3. Elder Sign", font, (255, 255, 255), screen, 120, 200)
 			pygame.draw.rect(screen, (255, 0, 0), button_5)
+			draw_text("4. Cthulu", font, (255, 255, 255), screen, 200, 200)
+
 			if button_1.collidepoint((mx, my)):
 				if click: 
 					tempnum = 1
@@ -161,9 +245,7 @@ def main_menu():
 
 		if button_3.collidepoint((mx, my)):
 			if click:
-				print("leak")
 				if pickchoice != True:
-					print("bullshit")
 					compress()
 
 
