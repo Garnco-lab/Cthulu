@@ -22,19 +22,25 @@ click = False
 global sanitynum 
 
 sanitynum = 18
+cthulu = 0
 
 def main_menu():
 	global sanitynum
+	global cthulu
 
 	while True:
  
 		screen.fill((0,0,0))
-		draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
+
+		# draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
 		mx, my = pygame.mouse.get_pos()
- 
+
+		draw_text("SANITY: " + str(sanitynum).encode("utf-8").decode("utf-8") + " CTHULU: " + str(cthulu).encode("utf-8").decode("utf-8")  , font,(255, 255, 255), screen, 20, 20)
+
 		button_1 = pygame.Rect(50, 100, 200, 50)
 		button_2 = pygame.Rect(50, 200, 200, 50)
-		button_3 = pygame.Rect(50, 300, 200, 50 )
+		button_3 = pygame.Rect(50, 300, 200, 50)
+
 		if button_1.collidepoint((mx, my)):
 			if click:
 				game()
@@ -43,8 +49,10 @@ def main_menu():
 				options()
 		if button_3.collidepoint((mx, my)):
 			if click:
-				sanitynum += 1
+				sanitynum -= 1
 				print(sanitynum)
+				cthulu += 1
+
 
 		pygame.draw.rect(screen, (255, 0, 0), button_1)
 		pygame.draw.rect(screen, (255, 0, 0), button_2)
