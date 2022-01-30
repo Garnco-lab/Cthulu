@@ -1,6 +1,6 @@
 #!/usr/bin/python3.4
 # Setup Python ----------------------------------------------- #
-import pygame, sys
+import pygame, sys, random
  
 # Setup pygame/window ---------------------------------------- #
 mainClock = pygame.time.Clock()
@@ -21,21 +21,40 @@ click = False
  
 global sanitynum 
 
-sanitynum = 18
-cthulu = 0
+defaultsanitynum = 3
+defaultcthulunum = 0
+
+rollMin = 1
+rollMax = 5
+
+player1sanitynum = defaultsanitynum
+cthulu = defaultcthulunum
+player2sanitynum = defaultsanitynum
+playerturn = 0
+
+def rollDice():
+	global rollMin
+	global rollMax
+	cheese = random.randint(rollMin, rollMax)
+	return cheese
 
 def main_menu():
-	global sanitynum
+	global player1sanitynum
+	global player2sanitynum
 	global cthulu
-
+	global click
+	global playerturn
+	
 	while True:
- 
+	
 		screen.fill((0,0,0))
 
 		# draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
 		mx, my = pygame.mouse.get_pos()
 
-		draw_text("SANITY: " + str(sanitynum).encode("utf-8").decode("utf-8") + " CTHULU: " + str(cthulu).encode("utf-8").decode("utf-8")  , font,(255, 255, 255), screen, 20, 20)
+		draw_text("PLAYER 1 - SANITY: " + str(player1sanitynum).encode("utf-8").decode("utf-8") , font,(255, 255, 255), screen, 20, 20)
+		draw_text("PLAYER 2 - SANITY: " + str(player2sanitynum).encode("utf-8").decode("utf-8") , font,(255, 255, 255), screen, 300, 20)
+		draw_text("CTHULU: " + str(cthulu).encode("utf-8").decode("utf-8"), font,(255, 255, 255), screen, 200, 20)
 
 		button_1 = pygame.Rect(50, 100, 200, 50)
 		button_2 = pygame.Rect(50, 200, 200, 50)
@@ -49,14 +68,52 @@ def main_menu():
 				options()
 		if button_3.collidepoint((mx, my)):
 			if click:
-				sanitynum -= 1
-				print(sanitynum)
-				cthulu += 1
+				tempnum = rollDice()
+				if playerturn == 0:
+					print("player 1")
+					playerturn = 1
+					match tempnum:
+						case 1:
+							player2sanitynum -= 1
+							cthulu += 1
+						case 2:
+							player1sanitynum += 1
+							player2sanitynum -= 1
+						case 3:
+							if cthulu > 0:
+								player1sanitynum += 1
+								cthulu -= 1
+						case 4:
+							player1sanitynum -= 1
+							player2sanitynum -= 1
+							cthulu += 2
+
+				elif playerturn == 1:
+					playerturn = 0
+					print("player 2")
+					match tempnum:
+						case 1:
+							player1sanitynum -= 1
+							cthulu += 1
+						case 2:
+							player2sanitynum += 1
+							player1sanitynum -= 1
+						case 3:
+							if cthulu > 0:
+								player2sanitynum += 1
+								cthulu -= 1
+						case 4:
+							player2sanitynum -= 1
+							player1sanitynum -= 1
+							cthulu += 2
+
 
 
 		pygame.draw.rect(screen, (255, 0, 0), button_1)
+
 		pygame.draw.rect(screen, (255, 0, 0), button_2)
 		pygame.draw.rect(screen, (255, 0, 0), button_3)
+		draw_text("ROLL DICE", font, (255, 255, 255), screen, 100, 320)
  
 		click = False
 		for event in pygame.event.get():
