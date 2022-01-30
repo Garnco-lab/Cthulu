@@ -114,6 +114,13 @@ def main_menu():
 	
 		screen.fill((0,0,0))
 
+		if player1sanitynum <= 0 and player2sanitynum <= 0:
+			print("tie!")
+		elif player1sanitynum <= 0:
+			print("player 1 loses!")
+		elif player2sanitynum <= 0:
+			print("player 2 loses!")
+
 
 		# draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
 		mx, my = pygame.mouse.get_pos()
@@ -122,13 +129,19 @@ def main_menu():
 		draw_text("PLAYER 2 - SANITY: " + str(player2sanitynum).encode("utf-8").decode("utf-8") , font,(255, 255, 255), screen, 300, 20)
 		draw_text("CTHULU: " + str(cthulu).encode("utf-8").decode("utf-8"), font,(255, 255, 255), screen, 200, 20)
 
-		button_1 = pygame.Rect(50, 100, 200, 50)
-		button_2 = pygame.Rect(50, 200, 200, 50)
+		button_1 = pygame.Rect(100, 100, 50, 50)
+		button_2 = pygame.Rect(50, 200, 50, 50)
+
 		button_3 = pygame.Rect(50, 300, 200, 50)
+
+		button_4 = pygame.Rect(120, 200, 50, 50)
+		button_5 = pygame.Rect(200, 200, 50, 50)
 		
 		if pickchoice == True:
 			pygame.draw.rect(screen, (255, 0, 0), button_1)
 			pygame.draw.rect(screen, (255, 0, 0), button_2)
+			pygame.draw.rect(screen, (255, 0, 0), button_4)
+			pygame.draw.rect(screen, (255, 0, 0), button_5)
 			if button_1.collidepoint((mx, my)):
 				if click: 
 					tempnum = 1
@@ -136,6 +149,14 @@ def main_menu():
 			if button_2.collidepoint((mx,my)):
 				if click: 
 					tempnum = 2
+					compress()
+			if button_4.collidepoint((mx,my)):
+				if click: 
+					tempnum = 3
+					compress()
+			if button_5.collidepoint((mx,my)):
+				if click: 
+					tempnum = 4
 					compress()
 
 		if button_3.collidepoint((mx, my)):
