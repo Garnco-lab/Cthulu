@@ -27,6 +27,7 @@ defaultcthulunum = 0
 
 rollMin = 1
 rollMax = 5
+tempnum = 0
 
 player1sanitynum = defaultsanitynum
 cthulu = defaultcthulunum
@@ -40,7 +41,65 @@ def rollDice():
 	cheese = random.randint(rollMin, rollMax)
 	return cheese
 
+def compress():
+	global player1sanitynum
+	global player2sanitynum
+	global cthulu
+	global click
+	global playerturn
+	global pickchoice
+	global tempnum
+	if playerturn == 0:
+		if pickchoice != True:
+			tempnum = rollDice()
+		if pickchoice == True:
+			pickchoice = False
+			print("player 1")
+		match tempnum:
+			case 1:
+				player2sanitynum -= 1
+				cthulu += 1
+			case 2:
+				player1sanitynum += 1
+				player2sanitynum -= 1
+			case 3:
+				if cthulu > 0:
+					player1sanitynum += 1
+					cthulu -= 1
+			case 4:
+				player1sanitynum -= 1
+				player2sanitynum -= 1
+				cthulu += 2
+			case 5:
+				pickchoice = True
+		if pickchoice != True:
+			playerturn = 1
 
+	elif playerturn == 1:
+		if pickchoice != True:
+			tempnum = rollDice()
+		if pickchoice == True:
+			pickchoice = False
+		print("player 2")
+		match tempnum:
+			case 1:
+				player1sanitynum -= 1
+				cthulu += 1
+			case 2:
+				player2sanitynum += 1
+				player1sanitynum -= 1
+			case 3:
+				if cthulu > 0:
+					player2sanitynum += 1
+					cthulu -= 1
+			case 4:
+				player2sanitynum -= 1
+				player1sanitynum -= 1
+				cthulu += 2
+			case 5:
+				pickchoice = True
+		if pickchoice != True:
+			playerturn = 0
 
 def main_menu():
 	global player1sanitynum
@@ -49,6 +108,7 @@ def main_menu():
 	global click
 	global playerturn
 	global pickchoice
+	global tempnum
 	
 	while True:
 	
@@ -69,54 +129,21 @@ def main_menu():
 		if pickchoice == True:
 			pygame.draw.rect(screen, (255, 0, 0), button_1)
 			pygame.draw.rect(screen, (255, 0, 0), button_2)
+			if button_1.collidepoint((mx, my)):
+				if click: 
+					tempnum = 1
+					compress()
+			if button_2.collidepoint((mx,my)):
+				if click: 
+					tempnum = 2
+					compress()
 
 		if button_3.collidepoint((mx, my)):
 			if click:
-				tempnum = rollDice()
-				if playerturn == 0:
-					print("player 1")
-					match tempnum:
-						case 1:
-							player2sanitynum -= 1
-							cthulu += 1
-						case 2:
-							player1sanitynum += 1
-							player2sanitynum -= 1
-						case 3:
-							if cthulu > 0:
-								player1sanitynum += 1
-								cthulu -= 1
-						case 4:
-							player1sanitynum -= 1
-							player2sanitynum -= 1
-							cthulu += 2
-						case 5:
-							pickchoice = True
-							
-					playerturn = 1
-
-				elif playerturn == 1:
-					
-					print("player 2")
-					match tempnum:
-						case 1:
-							player1sanitynum -= 1
-							cthulu += 1
-						case 2:
-							player2sanitynum += 1
-							player1sanitynum -= 1
-						case 3:
-							if cthulu > 0:
-								player2sanitynum += 1
-								cthulu -= 1
-						case 4:
-							player2sanitynum -= 1
-							player1sanitynum -= 1
-							cthulu += 2
-						case 5:
-							pickchoice = True
-					playerturn = 0
-
+				print("leak")
+				if pickchoice != True:
+					print("bullshit")
+					compress()
 
 
 
