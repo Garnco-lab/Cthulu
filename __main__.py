@@ -2,7 +2,8 @@
 # Setup Python ----------------------------------------------- #
 from operator import truediv
 from turtle import width, window_height, window_width
-import pygame, sys, random
+import pygame, sys
+import secrets
 
 # Setup pygame/window ---------------------------------------- #
 mainClock = pygame.time.Clock()
@@ -41,7 +42,7 @@ lastmove = ""
 def rollDice():
 	global rollMin
 	global rollMax
-	cheese = random.randint(rollMin, rollMax)
+	cheese = secrets.SystemRandom().randint(rollMin, rollMax)
 	return cheese
 
 def compress():
